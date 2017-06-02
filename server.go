@@ -43,7 +43,8 @@ func migrate(db *sql.DB) {
 	sql := `
 		    CREATE TABLE IF NOT EXISTS tasks(
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-			name VARCHAR NOT NULL
+			name VARCHAR NOT NULL,
+			date DATE
 		    );
 		`
 
