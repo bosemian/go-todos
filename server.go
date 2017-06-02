@@ -2,22 +2,24 @@ package main
 
 import (
 	"database/sql"
+	"go-todos/handlers"
 	"github.com/labstack/echo"
+	"go-todos/config"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
 
-	db := initDB("storage.db")
+	db := initDB(config.DB_NAME)
 	migrate(db)
 
 	e := echo.New()
 
-	e.GET("/tasks", func(c echo.Context) error { return c.JSON(200, "GET Tasks") })
-	e.POST("/tasks", func(c echo.Context) error { return c.JSON(200, "POST Tasks") })
-	e.DELETE("/tasks/:id", func(c echo.Context) error { return c.JSON(200, "DELETE Task "+c.Param("id")) })
+	e.GET("/tasks", handlers.GetTasks(db))
+	e.POST("/tasks", handlers.NewTask(db))
+	e.DELETE("/tasks/:id", handlers.DeleteTask(db))
 
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(config.PORT))
 
 }
 
